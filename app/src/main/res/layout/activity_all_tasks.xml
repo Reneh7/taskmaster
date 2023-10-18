@@ -36,6 +36,7 @@
         android:layout_marginBottom="96dp"
         android:backgroundTint="#AA3F1D"
         android:text="Back"
+        android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
