@@ -2,12 +2,12 @@
 
 ## Description
 
-Our Application for today is a task master that contains 3 activites: Home that contains header, image and two buttons that will direct you to add task activity and the all tasks activity. The all task activity contains header, image and a back button, the add task activity contains header, a form that let the user fill the task title and a description about it, a back button and a submit button that when you click on it it will increase the total tasks and display a submitted message.
+In todays lab we continued working on our task master app where we added a setting page that allow the users to enter the their username and it will be displayed in the home page. In addition to adding three hard coded tasks when you click on any of them it will direct you to that task details page in which the title will be the same as the button label.
 
 ## images
 
-![Home]()
-![Settings]()
-![Task1Details]()
-![Task2Details]()
-![Task3Details]()
+![Home](/screenshots/Home.jpeg)
+![Settings](/screenshots/Settings.jpeg)
+![Task1Details](/screenshots/TaskDetailsTask1.jpeg)
+![Task2Details](/screenshots/TaskDetailsTask2.jpeg)
+![Task3Details](/screenshots/TaskDetailsTask3.jpeg)
