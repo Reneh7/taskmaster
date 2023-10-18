@@ -10,3 +10,4 @@ The all task activity contains header, image and a back button, the add task act
 ![Add Second Task](/screenshots/AddSecond.jpeg)
 ![All Tasks](/screenshots/AllTasks.jpeg)
 ![Home](/screenshots/Home.jpeg)
+
