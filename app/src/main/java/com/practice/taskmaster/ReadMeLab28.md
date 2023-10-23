@@ -8,7 +8,7 @@ In this lab we enhanced our home page using Recycle View which allowed us to add
 
 ![chores](/screenshots/chores.jpeg)
 ![choresDetails](/screenshots/choresDetails.jpeg)
-![chores](/screenshots/chores.jpeg)
 ![entertainment](/screenshots/entertainment.jpeg)
+![entertainment](/screenshots/entertainmentDetails.jpeg)
 ![groceries](/screenshots/groceries.jpeg)
 ![groceriesDetails](/screenshots/groceriesDetails.jpeg)
