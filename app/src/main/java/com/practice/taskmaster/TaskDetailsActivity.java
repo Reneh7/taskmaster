@@ -21,10 +21,19 @@ public class TaskDetailsActivity extends AppCompatActivity {
         });
 
         TextView title=findViewById(R.id.taskDetailsTitle);
+        TextView body = findViewById(R.id.taskDetailsBody);
+        TextView status = findViewById(R.id.taskDetailsStatus);
+
         Intent intent=getIntent();
         String taskTitle=intent.getStringExtra("taskTitle");
+        String taskBody = intent.getStringExtra("taskBody");
+        String taskStatus = intent.getStringExtra("taskStatus");
+
         if(taskTitle!=null)
             title.setText(taskTitle);
-
+        if (taskBody != null)
+            body.setText(taskBody);
+        if (taskStatus != null)
+            status.setText(taskStatus);
     }
 }

@@ -1,6 +1,8 @@
 package com.practice.taskmaster;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +11,12 @@ import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity {
+    private RecyclerView recyclerView;
+    private TaskAdapter taskAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,5 +77,20 @@ public class MainActivity extends AppCompatActivity {
             sendTitle.putExtra("taskTitle","Playing");
             startActivity(sendTitle);
         });
+
+        //==========================================================================================
+
+        recyclerView = findViewById(R.id.recycleView);
+        taskAdapter = new TaskAdapter(createSampleTasks(),this);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.setAdapter(taskAdapter);
+
+    }
+    private List<Task> createSampleTasks() {
+        List<Task> tasks = new ArrayList<>();
+        tasks.add(new Task("Chores", "Washing the dishes", "new"));
+        tasks.add(new Task("Entertainment", "Listening to music", "assigned"));
+        tasks.add(new Task("Groceries", "Buy bread", "in progress"));
+        return tasks;
     }
 }
