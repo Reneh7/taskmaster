@@ -1,12 +1,12 @@
-package com.practice.taskmaster;
+package com.practice.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.practice.taskmaster.R;
 public class TaskDetailsActivity extends AppCompatActivity {
 
     @Override
@@ -16,7 +16,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         Button detailsBackButton=findViewById(R.id.taskDetailsBackButton);
         detailsBackButton.setOnClickListener(view -> {
-            Intent backToHomeFromDetails= new Intent(TaskDetailsActivity.this,MainActivity.class);
+            Intent backToHomeFromDetails= new Intent(TaskDetailsActivity.this,HomeActivity.class);
             startActivity(backToHomeFromDetails);
         });
 

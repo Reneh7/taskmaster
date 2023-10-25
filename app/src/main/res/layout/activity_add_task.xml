@@ -43,7 +43,7 @@
 
 
     <EditText
-        android:id="@+id/editTextText3"
+        android:id="@+id/taskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -53,6 +53,7 @@
         android:minHeight="48dp"
         android:textColor="#000000"
         android:textColorHint="#000000"
+        android:contentDescription="Task Title"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.129"
         app:layout_constraintStart_toStartOf="parent"
@@ -62,7 +63,7 @@
         android:id="@+id/editTextText2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="48dp"
+        android:layout_marginTop="24dp"
         android:backgroundTint="#FFFFFF"
         android:ems="10"
         android:inputType="text"
@@ -73,23 +74,38 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.195"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText3" />
+        app:layout_constraintTop_toBottomOf="@+id/taskTitle" />
 
     <EditText
-        android:id="@+id/editTextTextMultiLine"
+        android:id="@+id/taskBody"
         android:layout_width="306dp"
         android:layout_height="105dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="16dp"
         android:background="@color/white"
         android:ems="10"
         android:gravity="start|top"
         android:inputType="textMultiLine"
         android:textColor="#000000"
         android:textColorHint="#000000"
+        android:contentDescription="Task Body"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintHorizontal_bias="0.228"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextText2" />
+
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:text="Task State"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.105"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskBody" />
 
     <Button
         android:id="@+id/add"
@@ -97,33 +113,34 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="124dp"
         android:backgroundTint="#AA3F1D"
         android:text="Add"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.227"
+        app:layout_constraintHorizontal_bias="0.118"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
-        app:layout_constraintVertical_bias="0.464" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/addTaskButton"
+        android:id="@+id/addTaskBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        android:layout_marginTop="56dp"
         android:layout_marginEnd="50dp"
-        android:layout_marginBottom="68dp"
+        android:layout_marginBottom="124dp"
         android:backgroundTint="#AA3F1D"
         android:text="Back"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.198"
+        app:layout_constraintHorizontal_bias="0.564"
         app:layout_constraintStart_toEndOf="@+id/add"
-        app:layout_constraintTop_toBottomOf="@+id/editTextTextMultiLine"
-        app:layout_constraintVertical_bias="0.464" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/counter"
@@ -151,6 +168,14 @@
         app:layout_constraintHorizontal_bias="0.122"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add" />
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

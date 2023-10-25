@@ -1,10 +1,12 @@
-package com.practice.taskmaster;
+package com.practice.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
+
+import com.practice.taskmaster.R;
 
 public class AllTasksActivity extends AppCompatActivity {
 
@@ -15,7 +17,7 @@ public class AllTasksActivity extends AppCompatActivity {
 
         Button allTasksBackButton = findViewById(R.id.allTaskBack);
         allTasksBackButton.setOnClickListener(view -> {
-            Intent goBackToHome = new Intent(AllTasksActivity.this,MainActivity.class);
+            Intent goBackToHome = new Intent(AllTasksActivity.this, HomeActivity.class);
             startActivity(goBackToHome);
         });
     }
