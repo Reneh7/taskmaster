@@ -1,4 +1,4 @@
-package com.practice.taskmaster;
+package com.practice.taskmaster.adapters;
 
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.practice.taskmaster.R;
+import com.practice.taskmaster.models.Task;
+import com.practice.taskmaster.activities.TaskDetailsActivity;
 
 import java.util.List;
 
@@ -35,7 +39,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
             Intent sendTitle = new Intent(context, TaskDetailsActivity.class);
             sendTitle.putExtra("taskTitle", task.getTitle());
             sendTitle.putExtra("taskBody", task.getBody());
-            sendTitle.putExtra("taskStatus", task.getState());
+            sendTitle.putExtra("taskStatus", task.getState().toString());
             context.startActivity(sendTitle);
         });
     }
@@ -59,7 +63,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         public void bindTask(Task task) {
             titleTextView.setText(task.getTitle());
             bodyTextView.setText(task.getBody());
-            stateTextView.setText(task.getState());
+            stateTextView.setText(task.getState().toString());
         }
     }
 }

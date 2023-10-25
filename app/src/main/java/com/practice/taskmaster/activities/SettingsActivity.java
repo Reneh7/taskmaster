@@ -1,4 +1,4 @@
-package com.practice.taskmaster;
+package com.practice.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.practice.taskmaster.R;
 
 public class SettingsActivity extends AppCompatActivity {
 
@@ -38,7 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         Button settingsBackButton=findViewById(R.id.settingsBackButton);
         settingsBackButton.setOnClickListener(view -> {
-            Intent backToHomeFromSettings=new Intent(SettingsActivity.this,MainActivity.class);
+            Intent backToHomeFromSettings=new Intent(SettingsActivity.this, HomeActivity.class);
             startActivity(backToHomeFromSettings);
         });
 
