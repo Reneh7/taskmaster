@@ -13,11 +13,9 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.practice.taskmaster.R;
-import com.practice.taskmaster.dao.TaskDao;
 import com.practice.taskmaster.database.TaskDatabase;
 import com.practice.taskmaster.models.Task;
 import com.practice.taskmaster.adapters.TaskAdapter;
-import com.practice.taskmaster.enums.TaskState;
 
 import java.util.ArrayList;
 import java.util.List;
