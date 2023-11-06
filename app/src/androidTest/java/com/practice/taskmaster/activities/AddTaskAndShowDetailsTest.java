@@ -7,6 +7,7 @@ import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -37,14 +38,14 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AddTaskTest {
+public class AddTaskAndShowDetailsTest {
 
     @Rule
     public ActivityScenarioRule<HomeActivity> mActivityScenarioRule =
             new ActivityScenarioRule<>(HomeActivity.class);
 
     @Test
-    public void addTaskTest() {
+    public void addTaskAndShowDetailsTest() {
         ViewInteraction materialButton = onView(
                 allOf(withId(R.id.addTask), withText("Add Task"),
                         childAtPosition(
@@ -63,7 +64,7 @@ public class AddTaskTest {
                                         0),
                                 2),
                         isDisplayed()));
-        appCompatEditText.perform(replaceText("task1"), closeSoftKeyboard());
+        appCompatEditText.perform(replaceText("Task1"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
                 allOf(withId(R.id.taskBody), withContentDescription("Task Body"),
@@ -73,29 +74,9 @@ public class AddTaskTest {
                                         0),
                                 4),
                         isDisplayed()));
-        appCompatEditText2.perform(replaceText("This is the first task"), closeSoftKeyboard());
+        appCompatEditText2.perform(replaceText("This is the first task "), closeSoftKeyboard());
 
         pressBack();
-
-        ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.taskBody), withText("This is the first task"), withContentDescription("Task Body"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        appCompatEditText3.perform(replaceText("This is the first task\n"));
-
-        ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.taskBody), withText("This is the first task\n"), withContentDescription("Task Body"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                4),
-                        isDisplayed()));
-        appCompatEditText4.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatSpinner = onView(
                 allOf(withId(R.id.spinner),
@@ -107,21 +88,11 @@ public class AddTaskTest {
                         isDisplayed()));
         appCompatSpinner.perform(click());
 
-        ViewInteraction appCompatSpinner2 = onView(
-                allOf(withId(R.id.spinner),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                10),
-                        isDisplayed()));
-        appCompatSpinner2.perform(click());
-
         DataInteraction materialTextView = onData(anything())
                 .inAdapterView(childAtPosition(
                         withClassName(is("android.widget.PopupWindow$PopupBackgroundView")),
                         0))
-                .atPosition(0);
+                .atPosition(2);
         materialTextView.perform(click());
 
         ViewInteraction materialButton2 = onView(
@@ -143,6 +114,23 @@ public class AddTaskTest {
                                 7),
                         isDisplayed()));
         materialButton3.perform(click());
+
+        ViewInteraction recyclerView = onView(
+                allOf(withId(R.id.recycleView),
+                        childAtPosition(
+                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                6)));
+        recyclerView.perform(actionOnItemAtPosition(0, click()));
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.taskDetailsBackButton), withText("Back"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                0),
+                        isDisplayed()));
+        materialButton4.perform(click());
     }
 
     private static Matcher<View> childAtPosition(
