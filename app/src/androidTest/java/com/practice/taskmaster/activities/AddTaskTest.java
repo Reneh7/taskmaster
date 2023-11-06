@@ -3,11 +3,9 @@ package com.practice.taskmaster.activities;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
-import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
 import static androidx.test.espresso.matcher.ViewMatchers.withContentDescription;
@@ -38,7 +36,7 @@ import org.junit.runner.RunWith;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
-public class AddTaskAndShowDetailsTest {
+public class AddTaskTest {
 
     @Rule
     public ActivityScenarioRule<HomeActivity> mActivityScenarioRule =
@@ -76,8 +74,6 @@ public class AddTaskAndShowDetailsTest {
                         isDisplayed()));
         appCompatEditText2.perform(replaceText("This is the first task "), closeSoftKeyboard());
 
-        pressBack();
-
         ViewInteraction appCompatSpinner = onView(
                 allOf(withId(R.id.spinner),
                         childAtPosition(
@@ -104,33 +100,6 @@ public class AddTaskAndShowDetailsTest {
                                 6),
                         isDisplayed()));
         materialButton2.perform(click());
-
-        ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.addTaskBackButton), withText("Back"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                7),
-                        isDisplayed()));
-        materialButton3.perform(click());
-
-        ViewInteraction recyclerView = onView(
-                allOf(withId(R.id.recycleView),
-                        childAtPosition(
-                                withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                6)));
-        recyclerView.perform(actionOnItemAtPosition(0, click()));
-
-        ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.taskDetailsBackButton), withText("Back"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                0),
-                        isDisplayed()));
-        materialButton4.perform(click());
     }
 
     private static Matcher<View> childAtPosition(

@@ -24,6 +24,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="HUAWEI ELE-L29" value="120" />
+                  <entry key="Pixel_XL_API_34" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>
@@ -65,6 +66,7 @@
                 <map>
                   <entry key="Duration" value="90" />
                   <entry key="HUAWEI ELE-L29" value="120" />
+                  <entry key="Pixel_XL_API_34" value="120" />
                   <entry key="Tests" value="360" />
                 </map>
               </option>

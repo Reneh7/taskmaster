@@ -61,7 +61,6 @@ public class SettingsTest {
                         isDisplayed()));
         appCompatEditText.perform(replaceText("Reneh "), closeSoftKeyboard());
 
-        pressBack();
 
         ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.button), withText("Save"),
@@ -72,6 +71,7 @@ public class SettingsTest {
                                 3),
                         isDisplayed()));
         materialButton2.perform(click());
+
 
         ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.settingsBackButton), withText("Back"),
