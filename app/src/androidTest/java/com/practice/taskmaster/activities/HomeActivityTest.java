@@ -2,6 +2,7 @@ package com.practice.taskmaster.activities;
 
 
 import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
@@ -39,26 +40,6 @@ public class HomeActivityTest {
     @Test
     public void homeActivityTest() {
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.addTask), withText("Add Task"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
-                                        0),
-                                2),
-                        isDisplayed()));
-        materialButton.perform(click());
-
-        ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.addTaskBackButton), withText("Back"),
-                        childAtPosition(
-                                childAtPosition(
-                                        withId(android.R.id.content),
-                                        0),
-                                7),
-                        isDisplayed()));
-        materialButton2.perform(click());
-
-        ViewInteraction materialButton3 = onView(
                 allOf(withId(R.id.settingsButton), withText("Settings"),
                         childAtPosition(
                                 childAtPosition(
@@ -66,9 +47,9 @@ public class HomeActivityTest {
                                         0),
                                 3),
                         isDisplayed()));
-        materialButton3.perform(click());
+        materialButton.perform(click());
 
-        ViewInteraction materialButton4 = onView(
+        ViewInteraction materialButton2 = onView(
                 allOf(withId(R.id.settingsBackButton), withText("Back"),
                         childAtPosition(
                                 childAtPosition(
@@ -76,7 +57,29 @@ public class HomeActivityTest {
                                         0),
                                 2),
                         isDisplayed()));
+        materialButton2.perform(click());
+
+        ViewInteraction materialButton3 = onView(
+                allOf(withId(R.id.addTask), withText("Add Task"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
+                                        0),
+                                2),
+                        isDisplayed()));
+        materialButton3.perform(click());
+
+        ViewInteraction materialButton4 = onView(
+                allOf(withId(R.id.add), withText("Add"),
+                        childAtPosition(
+                                childAtPosition(
+                                        withId(android.R.id.content),
+                                        0),
+                                6),
+                        isDisplayed()));
         materialButton4.perform(click());
+
+        pressBack();
 
         ViewInteraction materialButton5 = onView(
                 allOf(withId(R.id.allTasks), withText("All Tasks"),
