@@ -14,12 +14,11 @@ public class TaskDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_details);
 
-        Button detailsBackButton=findViewById(R.id.taskDetailsBackButton);
-        detailsBackButton.setOnClickListener(view -> {
-            Intent backToHomeFromDetails= new Intent(TaskDetailsActivity.this,HomeActivity.class);
-            startActivity(backToHomeFromDetails);
-        });
+        TaskDetails();
+        BackButton();
+    }
 
+    private void TaskDetails(){
         TextView title=findViewById(R.id.taskDetailsTitle);
         TextView body = findViewById(R.id.taskDetailsBody);
         TextView status = findViewById(R.id.taskDetailsStatus);
@@ -36,4 +35,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
         if (taskStatus != null)
             status.setText(taskStatus);
     }
+
+    private void BackButton(){
+        Button detailsBackButton=findViewById(R.id.taskDetailsBackButton);
+        detailsBackButton.setOnClickListener(view -> {
+            Intent backToHomeFromDetails= new Intent(TaskDetailsActivity.this,HomeActivity.class);
+            startActivity(backToHomeFromDetails);
+        });
+    }
+
 }
