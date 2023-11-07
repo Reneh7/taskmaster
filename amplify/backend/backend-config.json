@@ -1,0 +1,22 @@
+{
+  "api": {
+    "taskmaster": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2024-01-06T12:23:59.408Z",
+              "apiKeyExpirationDays": 60,
+              "description": "this api key is for the model to be generated in the cloud and its for lab32"
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync"
+    }
+  }
+}

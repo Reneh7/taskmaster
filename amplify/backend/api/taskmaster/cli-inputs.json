@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "serviceConfiguration": {
+    "apiName": "taskmaster",
+    "serviceName": "AppSync",
+    "defaultAuthType": {
+      "mode": "API_KEY",
+      "expirationTime": 60,
+      "apiKeyExpirationDate": "2024-01-06T12:23:59.408Z",
+      "keyDescription": "this api key is for the model to be generated in the cloud and its for lab32"
+    },
+    "conflictResolution": {},
+    "additionalAuthTypes": []
+  }
+}

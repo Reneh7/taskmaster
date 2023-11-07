@@ -5,20 +5,19 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Task;
 import com.practice.taskmaster.R;
-import com.practice.taskmaster.models.Task;
 import com.practice.taskmaster.activities.TaskDetailsActivity;
 
 import java.util.List;
 
-public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder> {
-    private List<Task> taskList;
-    private Context context;
+public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
+     List<Task> taskList;
+     Context context;
     public TaskAdapter(List<Task> taskList, Context context) {
         this.taskList = taskList;
         this.context=context;
@@ -37,7 +36,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
         holder.bindTask(task);
         holder.itemView.setOnClickListener(view -> {
             Intent sendTitle = new Intent(context, TaskDetailsActivity.class);
-            sendTitle.putExtra("taskTitle", task.getTitle());
+            sendTitle.putExtra("taskTitle", task.getName());
             sendTitle.putExtra("taskBody", task.getBody());
             sendTitle.putExtra("taskStatus", task.getState().toString());
             context.startActivity(sendTitle);
@@ -47,23 +46,5 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskAdapter.TaskViewHolder
     @Override
     public int getItemCount() {
         return taskList.size();
-    }
-    public class TaskViewHolder extends RecyclerView.ViewHolder {
-        private TextView titleTextView;
-        private TextView bodyTextView;
-        private TextView stateTextView;
-
-        public TaskViewHolder(@NonNull View itemView) {
-            super(itemView);
-            titleTextView = itemView.findViewById(R.id.titleTextView);
-            bodyTextView = itemView.findViewById(R.id.bodyTextView);
-            stateTextView = itemView.findViewById(R.id.stateTextView);
-        }
-
-        public void bindTask(Task task) {
-            titleTextView.setText(task.getTitle());
-            bodyTextView.setText(task.getBody());
-            stateTextView.setText(task.getState().toString());
-        }
     }
 }
