@@ -7,3 +7,17 @@ type Todo @model {
   name: String!
   description: String
 }
+
+type Task @model @auth(rules: [{allow: public}]){
+  id: ID!
+  name: String!
+  body: String
+  state: TaskState
+}
+
+enum TaskState{
+  NEW
+  ASSIGNED
+  IN_PROGRESS
+  COMPLETE
+}

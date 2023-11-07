@@ -32,3 +32,39 @@ subscription OnDeleteTodo($filter: ModelSubscriptionTodoFilterInput) {
     __typename
   }
 }
+
+subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
+  onCreateTask(filter: $filter) {
+    id
+    name
+    body
+    state
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateTask($filter: ModelSubscriptionTaskFilterInput) {
+  onUpdateTask(filter: $filter) {
+    id
+    name
+    body
+    state
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteTask($filter: ModelSubscriptionTaskFilterInput) {
+  onDeleteTask(filter: $filter) {
+    id
+    name
+    body
+    state
+    createdAt
+    updatedAt
+    __typename
+  }
+}

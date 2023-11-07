@@ -6,8 +6,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Task;
 import com.practice.taskmaster.R;
-import com.practice.taskmaster.models.Task;
+
 
 public class TaskViewHolder extends RecyclerView.ViewHolder {
 
@@ -23,7 +24,7 @@ public class TaskViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void bindTask(Task task) {
-        titleTextView.setText(task.getTitle());
+        titleTextView.setText(task.getName());
         bodyTextView.setText(task.getBody());
         stateTextView.setText(task.getState().toString());
     }

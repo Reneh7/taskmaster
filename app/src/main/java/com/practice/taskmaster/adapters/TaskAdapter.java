@@ -5,20 +5,19 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.amplifyframework.datastore.generated.model.Task;
 import com.practice.taskmaster.R;
-import com.practice.taskmaster.models.Task;
 import com.practice.taskmaster.activities.TaskDetailsActivity;
 
 import java.util.List;
 
 public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
-    private List<Task> taskList;
-    private Context context;
+     List<Task> taskList;
+     Context context;
     public TaskAdapter(List<Task> taskList, Context context) {
         this.taskList = taskList;
         this.context=context;
@@ -37,7 +36,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         holder.bindTask(task);
         holder.itemView.setOnClickListener(view -> {
             Intent sendTitle = new Intent(context, TaskDetailsActivity.class);
-            sendTitle.putExtra("taskTitle", task.getTitle());
+            sendTitle.putExtra("taskTitle", task.getName());
             sendTitle.putExtra("taskBody", task.getBody());
             sendTitle.putExtra("taskStatus", task.getState().toString());
             context.startActivity(sendTitle);

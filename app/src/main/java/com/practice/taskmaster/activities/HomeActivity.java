@@ -8,22 +8,29 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.TaskState;
 import com.practice.taskmaster.R;
-import com.practice.taskmaster.enums.TaskState;
-import com.practice.taskmaster.models.Task;
+
 import com.practice.taskmaster.adapters.TaskAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-    private TaskAdapter taskAdapter;
+
 //    public static  final String DATABASE_NAME = "tasks_stuff";
 //    TaskDatabase taskDatabase;
-    List<Task> tasks =new ArrayList<>();
+    public static final String TAG="homeActivity";
+    private TaskAdapter taskAdapter;
+    List<Task> tasks=new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,6 +45,7 @@ public class HomeActivity extends AppCompatActivity {
 //                .build();
 //        tasks= taskDatabase.taskDao().findAll();
 
+        amplifier();
         setUpTaskListRecyclerView();
         AddTaskButton();
         AllTasksButton();
@@ -55,11 +63,28 @@ public class HomeActivity extends AppCompatActivity {
         user.setText(username +"'s Tasks:");
 
 //        tasks.addAll(taskDatabase.taskDao().findAll());
-        taskAdapter.notifyDataSetChanged();
+//        taskAdapter.notifyDataSetChanged();
+    }
+
+    public void amplifier(){
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                success->{
+                    Log.i(TAG,"Read tasks successfully");
+                        tasks.clear();
+                        for (Task databaseTask : success.getData()) {
+                            tasks.add(databaseTask);
+                        }
+                        runOnUiThread(() -> {
+                            taskAdapter.notifyDataSetChanged();
+                        });
+                },
+                failure-> Log.i(TAG,"failed to read tasks")
+        );
     }
 
     private void setUpTaskListRecyclerView(){
-        tasks.add(new Task("Cleaning","First Task", TaskState.NEW));
+//        tasks.add(new Task("Cleaning","First Task", TaskState.NEW));
         RecyclerView taskListRecycleReview = (RecyclerView) findViewById(R.id.recycleView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         taskListRecycleReview.setLayoutManager(layoutManager);
