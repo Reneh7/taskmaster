@@ -39,6 +39,7 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
             sendTitle.putExtra("taskTitle", task.getName());
             sendTitle.putExtra("taskBody", task.getBody());
             sendTitle.putExtra("taskStatus", task.getState().toString());
+            sendTitle.putExtra("taskTeam",task.getTeamTask().getName());
             context.startActivity(sendTitle);
         });
     }
