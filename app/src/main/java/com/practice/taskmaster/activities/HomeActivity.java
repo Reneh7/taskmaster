@@ -10,12 +10,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.TaskState;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.practice.taskmaster.R;
 
 import com.practice.taskmaster.adapters.TaskAdapter;
@@ -27,6 +30,7 @@ public class HomeActivity extends AppCompatActivity {
 
 //    public static  final String DATABASE_NAME = "tasks_stuff";
 //    TaskDatabase taskDatabase;
+    private String selectedTeam;
     public static final String TAG="homeActivity";
     private TaskAdapter taskAdapter;
     List<Task> tasks=new ArrayList<>();
@@ -45,12 +49,15 @@ public class HomeActivity extends AppCompatActivity {
 //                .build();
 //        tasks= taskDatabase.taskDao().findAll();
 
+        SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+        selectedTeam = sharedPreferences.getString(SettingsActivity.TEAM_TAG, "");
+
         amplifier();
         setUpTaskListRecyclerView();
+        queryTasks();
         AddTaskButton();
         AllTasksButton();
         SettingsButton();
-
     }
 
     // Shared Preference
@@ -67,13 +74,40 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     public void amplifier(){
+//        Team team1=Team.builder()
+//                .name("Reneh").build();
+//
+//        Team team2=Team.builder()
+//                .name("Balqees").build();
+//
+//        Team team3=Team.builder()
+//                .name("Farah").build();
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(team1),
+//                successResponse->Log.i(TAG,"HomeActivity.amplifier(): made team successfully."),
+//                failedResponse->Log.i(TAG,"HomeActivity.amplifier(): failed to make team."+failedResponse)
+//        );
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(team2),
+//                successResponse->Log.i(TAG,"HomeActivity.amplifier(): made team successfully."),
+//                failedResponse->Log.i(TAG,"HomeActivity.amplifier(): failed to make team."+failedResponse)
+//        );
+//
+//        Amplify.API.mutate(
+//                ModelMutation.create(team3),
+//                successResponse->Log.i(TAG,"HomeActivity.amplifier(): made team successfully."),
+//                failedResponse->Log.i(TAG,"HomeActivity.amplifier(): failed to make team."+failedResponse)
+//        );
+
         Amplify.API.query(
                 ModelQuery.list(Task.class),
                 success->{
                     Log.i(TAG,"Read tasks successfully");
                         tasks.clear();
-                        for (Task databaseTask : success.getData()) {
-                            tasks.add(databaseTask);
+                        for (Task databaseTask : success.getData()) {;
+                                tasks.add(databaseTask);
                         }
                         runOnUiThread(() -> {
                             taskAdapter.notifyDataSetChanged();
@@ -83,8 +117,28 @@ public class HomeActivity extends AppCompatActivity {
         );
     }
 
+    private void queryTasks() {
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                success -> {
+                    Log.i(TAG, "Read Task successfully");
+                    tasks.clear();
+                    for (Task databaseTask : success.getData()) {
+                        Team teamTask = databaseTask.getTeamTask();
+                        if (teamTask != null && teamTask.getName().equals(selectedTeam)) {
+                            tasks.add(databaseTask);
+                        }
+                    }
+                    runOnUiThread(() -> {
+                        taskAdapter.notifyDataSetChanged();
+                    });
+                },
+                failure -> Log.i(TAG, "Couldn't read tasks from DynamoDB ")
+        );
+    }
+
+
     private void setUpTaskListRecyclerView(){
-//        tasks.add(new Task("Cleaning","First Task", TaskState.NEW));
         RecyclerView taskListRecycleReview = (RecyclerView) findViewById(R.id.recycleView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         taskListRecycleReview.setLayoutManager(layoutManager);
