@@ -7,3 +7,7 @@ select their team from the settings page and it will display the associated task
 choosing the team when adding a new task. 
 
 ## images
+![Home Page](/screenshots/TeamHomePage.jpeg)
+![Settings Page](/screenshots/TeamSettingsPage.jpeg)
+![Task Details](/screenshots/TeamTaskDetails.jpeg)
+![Add Task](/screenshots/TeamAddTask.jpeg)
