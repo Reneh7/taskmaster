@@ -3,7 +3,6 @@ package com.practice.taskmaster.activities;
 
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.pressBack;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.replaceText;
@@ -46,7 +45,7 @@ public class AddTaskWithTeamTest {
     @Test
     public void addTaskWithTeamTest() {
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.addTask), withText("Add Task"),
+                allOf(withId(R.id.addTaskButton), withText("Add Task"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
@@ -56,7 +55,7 @@ public class AddTaskWithTeamTest {
         materialButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.taskTitle), withContentDescription("Task Title"),
+                allOf(withId(R.id.editTaskTitle), withContentDescription("Task Title"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -67,7 +66,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText.perform(replaceText("Tas"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.taskBody), withContentDescription("Task Body"),
+                allOf(withId(R.id.editTaskBody), withContentDescription("Task Body"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -78,7 +77,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText2.perform(replaceText("This is the eight task"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText3 = onView(
-                allOf(withId(R.id.taskBody), withText("This is the eight task"), withContentDescription("Task Body"),
+                allOf(withId(R.id.editTaskBody), withText("This is the eight task"), withContentDescription("Task Body"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -89,7 +88,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText3.perform(click());
 
         ViewInteraction appCompatEditText4 = onView(
-                allOf(withId(R.id.taskBody), withText("This is the eight task"), withContentDescription("Task Body"),
+                allOf(withId(R.id.editTaskBody), withText("This is the eight task"), withContentDescription("Task Body"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -100,7 +99,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText4.perform(replaceText("This is the eighth task"));
 
         ViewInteraction appCompatEditText5 = onView(
-                allOf(withId(R.id.taskBody), withText("This is the eighth task"), withContentDescription("Task Body"),
+                allOf(withId(R.id.editTaskBody), withText("This is the eighth task"), withContentDescription("Task Body"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -111,7 +110,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText5.perform(closeSoftKeyboard());
 
         ViewInteraction appCompatEditText6 = onView(
-                allOf(withId(R.id.taskTitle), withText("Tas"), withContentDescription("Task Title"),
+                allOf(withId(R.id.editTaskTitle), withText("Tas"), withContentDescription("Task Title"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -122,7 +121,7 @@ public class AddTaskWithTeamTest {
         appCompatEditText6.perform(replaceText("Task8"));
 
         ViewInteraction appCompatEditText7 = onView(
-                allOf(withId(R.id.taskTitle), withText("Task8"), withContentDescription("Task Title"),
+                allOf(withId(R.id.editTaskTitle), withText("Task8"), withContentDescription("Task Title"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -131,9 +130,9 @@ public class AddTaskWithTeamTest {
                                 2),
                         isDisplayed()));
         appCompatEditText7.perform(closeSoftKeyboard());
-        
+
         ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.spinner),
+                allOf(withId(R.id.editStateSpinner),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -151,7 +150,7 @@ public class AddTaskWithTeamTest {
         materialTextView.perform(click());
 
         ViewInteraction appCompatSpinner2 = onView(
-                allOf(withId(R.id.teamSpinner),
+                allOf(withId(R.id.editTeamSpinner),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -169,7 +168,7 @@ public class AddTaskWithTeamTest {
         materialTextView2.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.add), withText("Add"),
+                allOf(withId(R.id.edit), withText("Add"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(
@@ -180,7 +179,7 @@ public class AddTaskWithTeamTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.addTaskBackButton), withText("Back"),
+                allOf(withId(R.id.deleteTaskButton), withText("Back"),
                         childAtPosition(
                                 allOf(withId(R.id.addTaskActivity),
                                         childAtPosition(

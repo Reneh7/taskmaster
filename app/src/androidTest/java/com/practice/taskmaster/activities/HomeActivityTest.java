@@ -60,7 +60,7 @@ public class HomeActivityTest {
         materialButton2.perform(click());
 
         ViewInteraction materialButton3 = onView(
-                allOf(withId(R.id.addTask), withText("Add Task"),
+                allOf(withId(R.id.addTaskButton), withText("Add Task"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
@@ -70,7 +70,7 @@ public class HomeActivityTest {
         materialButton3.perform(click());
 
         ViewInteraction materialButton4 = onView(
-                allOf(withId(R.id.add), withText("Add"),
+                allOf(withId(R.id.edit), withText("Add"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

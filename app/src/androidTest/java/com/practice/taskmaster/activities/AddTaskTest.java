@@ -45,7 +45,7 @@ public class AddTaskTest {
     @Test
     public void addTaskAndShowDetailsTest() {
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.addTask), withText("Add Task"),
+                allOf(withId(R.id.addTaskButton), withText("Add Task"),
                         childAtPosition(
                                 childAtPosition(
                                         withClassName(is("androidx.constraintlayout.widget.ConstraintLayout")),
@@ -55,7 +55,7 @@ public class AddTaskTest {
         materialButton.perform(click());
 
         ViewInteraction appCompatEditText = onView(
-                allOf(withId(R.id.taskTitle), withContentDescription("Task Title"),
+                allOf(withId(R.id.editTaskTitle), withContentDescription("Task Title"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -65,7 +65,7 @@ public class AddTaskTest {
         appCompatEditText.perform(replaceText("Task1"), closeSoftKeyboard());
 
         ViewInteraction appCompatEditText2 = onView(
-                allOf(withId(R.id.taskBody), withContentDescription("Task Body"),
+                allOf(withId(R.id.editTaskBody), withContentDescription("Task Body"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -75,7 +75,7 @@ public class AddTaskTest {
         appCompatEditText2.perform(replaceText("This is the first task "), closeSoftKeyboard());
 
         ViewInteraction appCompatSpinner = onView(
-                allOf(withId(R.id.spinner),
+                allOf(withId(R.id.editStateSpinner),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -92,7 +92,7 @@ public class AddTaskTest {
         materialTextView.perform(click());
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.add), withText("Add"),
+                allOf(withId(R.id.edit), withText("Add"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),

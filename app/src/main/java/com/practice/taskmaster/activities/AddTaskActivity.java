@@ -32,7 +32,7 @@ public class AddTaskActivity extends AppCompatActivity {
     public static final String TAG="AddTaskActivity";
     CompletableFuture<List<Team>> teamFuture=new CompletableFuture<>();
 
-//    TaskDatabase taskDatabase;
+    //    TaskDatabase taskDatabase;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,28 +63,28 @@ public class AddTaskActivity extends AppCompatActivity {
         Amplify.API.query(
                 ModelQuery.list(Team.class),
                 successResponse->{
-           Log.i(TAG,"Read Team Successfully");
-                   ArrayList<String> teamNames=new ArrayList<>();
-                   ArrayList<Team> teams=new ArrayList<>();
-                   for (Team team:successResponse.getData()){
-                       teams.add(team);
-                       teamNames.add(team.getName());
-                   }
-                   teamFuture.complete(teams);
-                   runOnUiThread(()->{
-                       teamSpinner.setAdapter(new ArrayAdapter<>(
-                               this,
-                               android.R.layout.simple_spinner_item,
-                               teamNames
-                       ));
-                   });
-               },
-               failure->
-               {
-                   teamFuture.complete(null);
-                   Log.i(TAG,"Failed to read team");
-               }
-       );
+                    Log.i(TAG,"Read Team Successfully");
+                    ArrayList<String> teamNames=new ArrayList<>();
+                    ArrayList<Team> teams=new ArrayList<>();
+                    for (Team team:successResponse.getData()){
+                        teams.add(team);
+                        teamNames.add(team.getName());
+                    }
+                    teamFuture.complete(teams);
+                    runOnUiThread(()->{
+                        teamSpinner.setAdapter(new ArrayAdapter<>(
+                                this,
+                                android.R.layout.simple_spinner_item,
+                                teamNames
+                        ));
+                    });
+                },
+                failure->
+                {
+                    teamFuture.complete(null);
+                    Log.i(TAG,"Failed to read team");
+                }
+        );
 
         Button submitButton= findViewById(R.id.add);
         submitButton.setOnClickListener(view -> {
@@ -121,7 +121,7 @@ public class AddTaskActivity extends AppCompatActivity {
                     ModelMutation.create(newTask),
                     successResponse -> Log.i(TAG,"AddTaskActivity.onCreate(): created a task successfully"),
                     failResponse -> Log.i(TAG,"AddTaskActivity.onCreate(): failed to create a task"+failResponse)
-                    );
+            );
 
             // counter
             TextView count=findViewById(R.id.counter);

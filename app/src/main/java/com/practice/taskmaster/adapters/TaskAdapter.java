@@ -1,4 +1,5 @@
 package com.practice.taskmaster.adapters;
+import static com.practice.taskmaster.activities.HomeActivity.TASK_ID_TAG;
 
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.amplifyframework.datastore.generated.model.Task;
 import com.practice.taskmaster.R;
+import com.practice.taskmaster.activities.EditTaskActivity;
 import com.practice.taskmaster.activities.TaskDetailsActivity;
 
 import java.util.List;
@@ -35,11 +37,12 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
         Task task = taskList.get(position);
         holder.bindTask(task);
         holder.itemView.setOnClickListener(view -> {
-            Intent sendTitle = new Intent(context, TaskDetailsActivity.class);
+            Intent sendTitle = new Intent(context, EditTaskActivity.class);
             sendTitle.putExtra("taskTitle", task.getName());
             sendTitle.putExtra("taskBody", task.getBody());
             sendTitle.putExtra("taskStatus", task.getState().toString());
             sendTitle.putExtra("taskTeam",task.getTeamTask().getName());
+            sendTitle.putExtra(TASK_ID_TAG, task.getId());
             context.startActivity(sendTitle);
         });
     }

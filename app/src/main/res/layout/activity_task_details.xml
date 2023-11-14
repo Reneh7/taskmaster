@@ -11,13 +11,15 @@
         android:id="@+id/taskDetailsBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="27dp"
         android:layout_marginBottom="116dp"
         android:backgroundTint="#AA3F1D"
         android:text="Back"
         android:textColor="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.466"
         app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
@@ -82,4 +84,5 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/taskDetailsStatus" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

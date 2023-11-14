@@ -8,7 +8,6 @@ import android.widget.TextView;
 
 import com.practice.taskmaster.R;
 public class TaskDetailsActivity extends AppCompatActivity {
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,5 +46,4 @@ public class TaskDetailsActivity extends AppCompatActivity {
             startActivity(backToHomeFromDetails);
         });
     }
-
 }
