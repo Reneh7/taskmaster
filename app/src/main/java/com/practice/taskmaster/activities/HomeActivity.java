@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
-
-//    public static  final String DATABASE_NAME = "tasks_stuff";
+    public static final String TASK_ID_TAG="task_Id_Tag";
+    //    public static  final String DATABASE_NAME = "tasks_stuff";
 //    TaskDatabase taskDatabase;
     private String selectedTeam;
     public static final String TAG="homeActivity";
@@ -105,13 +105,13 @@ public class HomeActivity extends AppCompatActivity {
                 ModelQuery.list(Task.class),
                 success->{
                     Log.i(TAG,"Read tasks successfully");
-                        tasks.clear();
-                        for (Task databaseTask : success.getData()) {;
-                                tasks.add(databaseTask);
-                        }
-                        runOnUiThread(() -> {
-                            taskAdapter.notifyDataSetChanged();
-                        });
+                    tasks.clear();
+                    for (Task databaseTask : success.getData()) {;
+                        tasks.add(databaseTask);
+                    }
+                    runOnUiThread(() -> {
+                        taskAdapter.notifyDataSetChanged();
+                    });
                 },
                 failure-> Log.i(TAG,"failed to read tasks")
         );
