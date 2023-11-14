@@ -10,6 +10,7 @@
 | Lab 29     | [Readme](app/src/main/java/com/practice/taskmaster/readMeFiles/ReadMeLab29.md) |
 | Lab 32     | [Readme](app/src/main/java/com/practice/taskmaster/readMeFiles/ReadMeLab32.md) |
 | Lab 33     | [Readme](app/src/main/java/com/practice/taskmaster/readMeFiles/ReadMeLab33.md) |
+| Lab 34     | [Readme](app/src/main/java/com/practice/taskmaster/readMeFiles/ReadMeLab34.md) |
 
 
 
