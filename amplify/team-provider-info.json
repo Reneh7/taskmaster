@@ -14,6 +14,9 @@
     "categories": {
       "api": {
         "taskmaster": {}
+      },
+      "auth": {
+        "taskmasterf3c0d200": {}
       }
     }
   }

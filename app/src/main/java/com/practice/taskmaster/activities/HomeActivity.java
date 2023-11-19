@@ -9,15 +9,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
-import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUser;
+import com.amplifyframework.auth.AuthUserAttribute;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
-import com.amplifyframework.datastore.generated.model.TaskState;
 import com.amplifyframework.datastore.generated.model.Team;
 import com.practice.taskmaster.R;
 
@@ -52,6 +53,7 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         selectedTeam = sharedPreferences.getString(SettingsActivity.TEAM_TAG, "");
 
+        setUpLoginAndLogOutButton();
         amplifier();
         setUpTaskListRecyclerView();
         queryTasks();
@@ -69,6 +71,41 @@ public class HomeActivity extends AppCompatActivity {
         String username = sharedPreferences.getString("username", "DefaultUsername");
         user.setText(username +"'s Tasks:");
 
+        AuthUser authUser=Amplify.Auth.getCurrentUser();
+        if(authUser==null){
+            Button loginButton=findViewById(R.id.loginButtonInHome);
+            loginButton.setVisibility(View.VISIBLE);
+            Button logoutButton=findViewById(R.id.logOutButtonInHome);
+            logoutButton.setVisibility(View.INVISIBLE);
+        }else {
+            String nickName =authUser.getUsername();
+            Log.i(TAG,"UserName"+nickName);
+            Button loginButton=findViewById(R.id.loginButtonInHome);
+            loginButton.setVisibility(View.INVISIBLE);
+            Button logoutButton=findViewById(R.id.logOutButtonInHome);
+            logoutButton.setVisibility(View.VISIBLE);
+        }
+        //==================================================================
+        String username2 = username;
+        Amplify.Auth.fetchUserAttributes(
+                success ->
+                {
+                    Log.i(TAG, "Fetch user attributes succeeded for username: "+username2);
+                    for (AuthUserAttribute userAttribute: success){
+                        if(userAttribute.getKey().getKeyString().equals("email")){
+                            String userEmail = userAttribute.getValue();
+                            runOnUiThread(() ->
+                            {
+                                ((TextView)findViewById(R.id.userNicknameTextView)).setText(userEmail);
+                            });
+                        }
+                    }
+                },
+                failure ->
+                {
+                    Log.i(TAG, "Fetch user attributes failed: "+failure.toString());
+                }
+        );
 //        tasks.addAll(taskDatabase.taskDao().findAll());
 //        taskAdapter.notifyDataSetChanged();
     }
@@ -169,6 +206,31 @@ public class HomeActivity extends AppCompatActivity {
         settingsPage.setOnClickListener(view -> {
             Intent goToSettings = new Intent(HomeActivity.this, SettingsActivity.class);
             startActivity(goToSettings);
+        });
+    }
+
+    public void setUpLoginAndLogOutButton(){
+        Button loginButton=findViewById(R.id.loginButtonInHome);
+        loginButton.setOnClickListener(v->{
+            Intent goToLogin = new Intent(HomeActivity.this, LogInActivity.class);
+            startActivity(goToLogin);
+        });
+
+        Button logoutButton=findViewById(R.id.logOutButtonInHome);
+        logoutButton.setOnClickListener(v->{
+            Amplify.Auth.signOut(
+                    ()-> {Log.i(TAG,"logOut successfully");
+                        runOnUiThread(()->{
+                            ((TextView)findViewById(R.id.userNicknameTextView)).setText("");
+                        });
+                        Intent goToLogin = new Intent(HomeActivity.this, LogInActivity.class);
+                        startActivity(goToLogin);
+                        },
+                    failure->{Log.i(TAG,"logOut failed");
+                        runOnUiThread(()-> {
+                            Toast.makeText(HomeActivity.this,"Logout Failed",Toast.LENGTH_LONG);
+                        });
+                    });
         });
     }
 }
