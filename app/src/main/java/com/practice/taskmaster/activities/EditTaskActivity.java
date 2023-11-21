@@ -1,13 +1,22 @@
 package com.practice.taskmaster.activities;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -21,6 +30,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.practice.taskmaster.R;
 
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -28,14 +39,14 @@ import java.util.concurrent.ExecutionException;
 
 public class EditTaskActivity extends AppCompatActivity {
 
-    public static final String TAG="editTaskActivity";
-    private CompletableFuture<Task> taskCompletableFuture=null;
-    private CompletableFuture<List<Team>> teamFuture=null;
-    private Task taskToEdit=null;
+    public static final String TAG = "editTaskActivity";
+    private CompletableFuture<Task> taskCompletableFuture = null;
+    private CompletableFuture<List<Team>> teamFuture = null;
+    private Task taskToEdit = null;
     private EditText nameEditText;
     private EditText descriptionEditText;
-    private Spinner taskStateSpinner=null;
-    private Spinner taskTeamSpinner=null;
+    private Spinner taskStateSpinner = null;
+    private Spinner taskTeamSpinner = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,7 @@ public class EditTaskActivity extends AppCompatActivity {
         setUpEditItems();
         setUpSaveButton();
         setUpDeleteButton();
+
     }
 
     private void setUpEditItems() {
@@ -134,7 +146,6 @@ public class EditTaskActivity extends AppCompatActivity {
         }
         return 0;
     }
-
     private void setUpSaveButton() {
         Button saveButton = findViewById(R.id.edit);
         saveButton.setOnClickListener(v -> {
@@ -203,3 +214,4 @@ public class EditTaskActivity extends AppCompatActivity {
         });
     }
 }
+
