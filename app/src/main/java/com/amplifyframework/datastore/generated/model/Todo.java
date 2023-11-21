@@ -2,6 +2,7 @@ package com.amplifyframework.datastore.generated.model;
 
 import com.amplifyframework.core.model.temporal.Temporal;
 
+
 import java.util.List;
 import java.util.UUID;
 import java.util.Objects;
@@ -187,19 +188,22 @@ public final class Todo implements Model {
   
 
   public final class CopyOfBuilder extends Builder {
-      private CopyOfBuilder(String id, String name, String description) {
-          super(id, name, description);
-          Objects.requireNonNull(name);
-      }
-
-      @Override
-      public CopyOfBuilder name(String name) {
-          return (CopyOfBuilder) super.name(name);
-      }
-
-      @Override
-      public CopyOfBuilder description(String description) {
-          return (CopyOfBuilder) super.description(description);
-      }
+    private CopyOfBuilder(String id, String name, String description) {
+      super(id, name, description);
+      Objects.requireNonNull(name);
+    }
+    
+    @Override
+     public CopyOfBuilder name(String name) {
+      return (CopyOfBuilder) super.name(name);
+    }
+    
+    @Override
+     public CopyOfBuilder description(String description) {
+      return (CopyOfBuilder) super.description(description);
+    }
   }
+  
+
+
 }

@@ -1,9 +1,11 @@
 package com.practice.taskmaster.activities;
 
+import androidx.activity.result.ActivityResultLauncher;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,6 +26,10 @@ import com.practice.taskmaster.R;
 
 import com.practice.taskmaster.adapters.TaskAdapter;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,6 +41,7 @@ public class HomeActivity extends AppCompatActivity {
     public static final String TAG="homeActivity";
     private TaskAdapter taskAdapter;
     List<Task> tasks=new ArrayList<>();
+    ActivityResultLauncher<Intent> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,6 +60,8 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         selectedTeam = sharedPreferences.getString(SettingsActivity.TEAM_TAG, "");
 
+//        activityResultLauncher=getImagePickActivityResultLauncher();
+        createFile();
         setUpLoginAndLogOutButton();
         amplifier();
         setUpTaskListRecyclerView();
@@ -60,6 +69,10 @@ public class HomeActivity extends AppCompatActivity {
         AddTaskButton();
         AllTasksButton();
         SettingsButton();
+    }
+
+    private ActivityResultLauncher<Intent> getImagePickActivityResultLauncher() {
+        return null;
     }
 
     // Shared Preference
@@ -108,6 +121,35 @@ public class HomeActivity extends AppCompatActivity {
         );
 //        tasks.addAll(taskDatabase.taskDao().findAll());
 //        taskAdapter.notifyDataSetChanged();
+    }
+
+    public void createFile(){
+        String emptyFilename= "emptyTestFileName";
+        File emptyFile = new File(getApplicationContext().getFilesDir(), emptyFilename);
+
+        try {
+            BufferedWriter emptyFileBufferedWriter= new BufferedWriter(new FileWriter(emptyFile));
+
+            emptyFileBufferedWriter.append("Some text here from Reneh\nAnother line from Reneh");
+
+            emptyFileBufferedWriter.close();
+        }catch (IOException ioe){
+            Log.i(TAG, "could not write locally with filename: "+ emptyFilename);
+        }
+
+        String emptyFileS3Key = "someFileOnS3.txt";
+        Amplify.Storage.uploadFile(
+                emptyFileS3Key,
+                emptyFile,
+                success ->
+                {
+                    Log.i(TAG, "S3 upload succeeded and the Key is: " + success.getKey());
+                },
+                failure ->
+                {
+                    Log.i(TAG, "S3 upload failed! " + failure.getMessage());
+                }
+        );
     }
 
     public void amplifier(){
@@ -208,7 +250,6 @@ public class HomeActivity extends AppCompatActivity {
             startActivity(goToSettings);
         });
     }
-
     public void setUpLoginAndLogOutButton(){
         Button loginButton=findViewById(R.id.loginButtonInHome);
         loginButton.setOnClickListener(v->{
