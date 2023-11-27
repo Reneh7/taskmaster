@@ -334,4 +334,55 @@ public class AddTaskActivity extends AppCompatActivity {
         }
         return result;
     }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Intent callingIntent = getIntent();
+
+        if (callingIntent != null) {
+            if (callingIntent.getType() != null && callingIntent.getType().equals("text/plain")) {
+                handleTextIntent(callingIntent);
+            }
+            if (callingIntent.getType() != null && callingIntent.getType().startsWith("image")) {
+                handleImageIntent(callingIntent);
+            }
+        }
+    }
+
+    private void handleTextIntent(Intent intent) {
+        String callingText = intent.getStringExtra(Intent.EXTRA_TEXT);
+        if (callingText != null) {
+            String cleanedText = cleanText(callingText);
+            ((EditText) findViewById(R.id.taskTitle)).setText(cleanedText);
+            ((EditText) findViewById(R.id.taskBody)).setText(cleanedText);
+        }
+    }
+
+    private void handleImageIntent(Intent intent) {
+        Uri incomingImageFileUri = intent.getParcelableExtra(Intent.EXTRA_STREAM);
+        if (incomingImageFileUri != null) {
+            try {
+                InputStream incomingImageFileInputStream = getContentResolver().openInputStream(incomingImageFileUri);
+                ImageView taskImageView = findViewById(R.id.taskImageImageView);
+                Log.d(TAG, "Image URI: " + incomingImageFileUri);
+
+
+                if (taskImageView != null) {
+                    taskImageView.setImageBitmap(BitmapFactory.decodeStream(incomingImageFileInputStream));
+                } else {
+                    Log.e(TAG, "ImageView is null for some reason");
+                }
+            } catch (FileNotFoundException fnfe) {
+                Log.e(TAG, "Could not get file stream from the URI " + fnfe.getMessage(), fnfe);
+            }
+        }
+    }
+
+
+    private String cleanText(String text) {
+        text = text.replaceAll("\\b(?:https?|ftp):\\/\\/\\S+\\b", ""); // remove links
+        text = text.replaceAll("\"", ""); // remove double quotation
+
+        return text;
+    }
 }
