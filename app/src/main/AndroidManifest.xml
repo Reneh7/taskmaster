@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".TaskMasterAmplifyApplication"
         android:allowBackup="true"
@@ -13,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TaskMaster"
         tools:targetApi="31">
+
         <activity
             android:name=".activities.LogInActivity"
             android:exported="false" />
@@ -23,23 +26,24 @@
             android:name=".activities.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.DeleteTaskActivity"
-            android:exported="false" />
-        <activity
-            android:name=".activities.EditTaskActivity"
-            android:exported="false" />
-        <activity
             android:name=".activities.SettingsActivity"
             android:exported="false" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.HomeActivity" />
+
         <activity
             android:name=".activities.TaskDetailsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.AllTasksActivity"
+            android:name=".activities.EditTaskActivity"
             android:exported="false" />
-        <activity
-            android:name=".activities.AddTaskActivity"
-            android:exported="false" />
+
+        <meta-data
+            android:name="android.support.PARENT_ACTIVITY"
+            android:value=".activities.HomeActivity" />
+
         <activity
             android:name=".activities.HomeActivity"
             android:exported="true">
@@ -48,6 +52,23 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.AddTaskActivity"
+            android:exported="true">
+            <intent-filter android:label="add text or image for a new task"> <!-- this is the text that shows up when the user is picking an app to handle the intent -->
+                <action android:name="android.intent.action.SEND" /> <!-- this will register our activity as being able to process this intent -->
+                <category android:name="android.intent.category.DEFAULT" /> <!-- this is needed for all implicit intents -->
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="image/*" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.AllTasksActivity"
+            android:label="All Tasks">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".activities.HomeActivity" />
         </activity>
     </application>
 
