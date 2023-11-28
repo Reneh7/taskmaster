@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -34,18 +35,22 @@ public class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull TaskViewHolder holder, int position) {
-        Task task = taskList.get(position);
-        holder.bindTask(task);
-        holder.itemView.setOnClickListener(view -> {
-            Intent sendTitle = new Intent(context, EditTaskActivity.class);
-            sendTitle.putExtra("taskTitle", task.getName());
-            sendTitle.putExtra("taskBody", task.getBody());
-            sendTitle.putExtra("taskStatus", task.getState().toString());
-            sendTitle.putExtra("taskTeam",task.getTeamTask().getName());
-            sendTitle.putExtra("taskImage",task.getTaskImageS3Key());
-            sendTitle.putExtra(TASK_ID_TAG, task.getId());
-            context.startActivity(sendTitle);
-        });
+        if (taskList != null && position >= 0 && position < taskList.size()) {
+            Task task = taskList.get(position);
+            holder.bindTask(task);
+            holder.itemView.setOnClickListener(view -> {
+                Intent sendTitle = new Intent(context, TaskDetailsActivity.class);
+                sendTitle.putExtra("taskTitle", task.getName());
+                sendTitle.putExtra("taskBody", task.getBody());
+                sendTitle.putExtra("taskStatus", task.getState().toString());
+                sendTitle.putExtra("taskTeam", task.getTeamTask().getName());
+                sendTitle.putExtra("taskImage", task.getTaskImageS3Key());
+                sendTitle.putExtra("taskLongitude", task.getTaskLongitude());
+                sendTitle.putExtra("taskLatitude", task.getTaskLatitude());
+                sendTitle.putExtra(TASK_ID_TAG, task.getId());
+                context.startActivity(sendTitle);
+            });
+        }
     }
 
     @Override

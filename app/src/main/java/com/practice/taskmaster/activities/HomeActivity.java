@@ -35,6 +35,7 @@ import java.util.List;
 
 public class HomeActivity extends AppCompatActivity {
     public static final String TASK_ID_TAG="task_Id_Tag";
+    public static final String TASK_ID_EXTRA = TASK_ID_TAG;
     //    public static  final String DATABASE_NAME = "tasks_stuff";
 //    TaskDatabase taskDatabase;
     private String selectedTeam;
@@ -273,5 +274,17 @@ public class HomeActivity extends AppCompatActivity {
                         });
                     });
         });
+    }
+
+    private void openTaskDetail(String taskTitle, Task task) {
+        Intent taskDetailIntent = new Intent(HomeActivity.this, TaskDetailsActivity.class);
+
+        taskDetailIntent.putExtra(TASK_ID_EXTRA, task.getId());
+        taskDetailIntent.putExtra("taskTitle", taskTitle);
+        taskDetailIntent.putExtra("taskBody", task.getBody());
+        taskDetailIntent.putExtra("taskStatus", task.getState().toString());
+        taskDetailIntent.putExtra("taskTeam", task.getTeamTask().toString());
+
+        startActivity(taskDetailIntent);
     }
 }

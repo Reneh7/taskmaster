@@ -5,12 +5,15 @@ import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -24,19 +27,31 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.TaskState;
 import com.amplifyframework.datastore.generated.model.Team;
-import com.google.android.material.snackbar.Snackbar;
+import android.Manifest;
+
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.practice.taskmaster.R;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -44,9 +59,14 @@ import java.util.concurrent.ExecutionException;
 public class AddTaskActivity extends AppCompatActivity {
     int x=1;
     public static final String TAG="AddTaskActivity";
+    static final int LOCATION_POLLING_INTERVAL = 5 * 1000;
     CompletableFuture<List<Team>> teamFuture=new CompletableFuture<>();
     ActivityResultLauncher<Intent> activityResultLauncher;
     private String s3ImageKey = "";
+    FusedLocationProviderClient locationProviderClient = null;
+    Geocoder geocoder=null;
+//    Spinner teamSpinner= null;
+//    Spinner taskCategorySpinner=null;
 
     //    TaskDatabase taskDatabase;
     @Override
@@ -65,21 +85,80 @@ public class AddTaskActivity extends AppCompatActivity {
         activityResultLauncher = getImagePickingActivityResultLauncher();
 //        setUpNonButtonUiElements();
 
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+
+        locationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+        locationProviderClient.flushLocations();
+
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        locationProviderClient.getLastLocation().addOnSuccessListener(location ->
+        {
+            if (location == null) {
+                Log.e(TAG, "Location CallBack was null");
+            }
+            String currentLatitude = Double.toString(location.getLatitude());
+            String currentLongitude = Double.toString(location.getLongitude());
+            Log.i(TAG, "Our userLatitude: " + location.getLatitude());
+            Log.i(TAG, "Our userLongitude: " + location.getLongitude());
+        });
+
+        locationProviderClient.getCurrentLocation(LocationRequest.PRIORITY_HIGH_ACCURACY, new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+        });
+
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(LOCATION_POLLING_INTERVAL);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                try {
+                    String address = geocoder.getFromLocation(
+                                    locationResult.getLastLocation().getLatitude(),
+                                    locationResult.getLastLocation().getLongitude(),
+                                    1)
+                            .get(0)
+                            .getAddressLine(0);
+                    Log.i(TAG, "Repeating current location is: " + address);
+                } catch (IOException ioe) {
+                    Log.e(TAG, "Could not get subscribed location: " + ioe.getMessage(), ioe);
+                }
+            }
+        };
+
+        locationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+
+        setUpSpinner();
         setUpSubmitButton();
-        backButton();
         setUpAddImageButton();
         setUpDeleteImageButton();
         updateImageButtons();
-    }
-    private void setUpSubmitButton() {
-        Button saveButton = findViewById(R.id.add);
-        saveButton.setOnClickListener(v -> {
-            SubmitButton(s3ImageKey);
-        });
+        backButton();
     }
 
-    private void SubmitButton(String imageS3Key){
-
+    private void setUpSpinner() {
         // TaskStateSpinner
         Spinner taskCategorySpinner = (Spinner) findViewById(R.id.spinner);
         taskCategorySpinner.setAdapter(new ArrayAdapter<>(
@@ -91,16 +170,16 @@ public class AddTaskActivity extends AppCompatActivity {
         Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
         Amplify.API.query(
                 ModelQuery.list(Team.class),
-                successResponse->{
-                    Log.i(TAG,"Read Team Successfully");
-                    ArrayList<String> teamNames=new ArrayList<>();
-                    ArrayList<Team> teams=new ArrayList<>();
-                    for (Team team:successResponse.getData()){
+                successResponse -> {
+                    Log.i(TAG, "Read Team Successfully");
+                    ArrayList<String> teamNames = new ArrayList<>();
+                    ArrayList<Team> teams = new ArrayList<>();
+                    for (Team team : successResponse.getData()) {
                         teams.add(team);
                         teamNames.add(team.getName());
                     }
                     teamFuture.complete(teams);
-                    runOnUiThread(()->{
+                    runOnUiThread(() -> {
                         teamSpinner.setAdapter(new ArrayAdapter<>(
                                 this,
                                 android.R.layout.simple_spinner_item,
@@ -108,26 +187,29 @@ public class AddTaskActivity extends AppCompatActivity {
                         ));
                     });
                 },
-                failure->
+                failure ->
                 {
                     teamFuture.complete(null);
-                    Log.i(TAG,"Failed to read team");
+                    Log.i(TAG, "Failed to read team");
                 }
         );
-
-        Button submitButton= findViewById(R.id.add);
-        submitButton.setOnClickListener(view -> {
-            Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show();
-//            Task newTask=new Task(
-//                    ((EditText) findViewById(R.id.taskTitle)).getText().toString(),
-//                    ((EditText) findViewById(R.id.taskBody)).getText().toString(),
-//                    TaskState.fromString(taskCategorySpinner.getSelectedItem().toString())
-//            );
-//            taskDatabase.taskDao().insertATask(newTask);
-            // save in database
+    }
+    private void setUpSubmitButton() {
+        Button saveButton = findViewById(R.id.add);
+        saveButton.setOnClickListener(v -> {
+            if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                return;
+            }
             String title=((EditText) findViewById(R.id.taskTitle)).getText().toString();
             String body= ((EditText) findViewById(R.id.taskBody)).getText().toString();
-            TaskState state=(TaskState) taskCategorySpinner.getSelectedItem();
+            Spinner teamSpinner = (Spinner) findViewById(R.id.teamSpinner);
             String selectedTeamString= teamSpinner.getSelectedItem().toString();
 
             List<Team> teams=null;
@@ -140,23 +222,64 @@ public class AddTaskActivity extends AppCompatActivity {
             }
 
             Team selectedTeams= teams.stream().filter(c->c.getName().equals(selectedTeamString)).findAny().orElseThrow(RuntimeException::new);
+            locationProviderClient.getLastLocation().addOnSuccessListener(location ->
+                            {
+                                if (location == null) {
+                                    Log.e(TAG, "Location CallBack was null");
+                                }
+                                String currentLatitude = Double.toString(location.getLatitude());
+                                String currentLongitude = Double.toString(location.getLongitude());
+                                Log.i(TAG, "Our userLatitude: " + location.getLatitude());
+                                Log.i(TAG, "Our userLongitude: " + location.getLongitude());
+                                SubmitButton(title, body, currentLatitude, currentLongitude, selectedTeams, s3ImageKey);
+                            }
+                    )
+                    .addOnCanceledListener(() ->
+                    {
+                        Log.e(TAG, "Location request was Canceled");
+                    })
+                    .addOnFailureListener(failure ->
+                    {
+                        Log.e(TAG, "Location request failed, Error was: " + failure.getMessage(), failure.getCause());
+                    })
+                    .addOnCompleteListener(complete ->
+                    {
+                        Log.e(TAG, "Location request Completed");
+                    });
+        });
+    }
+
+    private void SubmitButton(String title, String body, String latitude, String longitude, Team selectedTeams, String imageS3Key){
+//            Task newTask=new Task(
+//                    ((EditText) findViewById(R.id.taskTitle)).getText().toString(),
+//                    ((EditText) findViewById(R.id.taskBody)).getText().toString(),
+//                    TaskState.fromString(taskCategorySpinner.getSelectedItem().toString())
+//            );
+//            taskDatabase.taskDao().insertATask(newTask);
+            // save in databas
+        Spinner taskCategorySpinner = (Spinner) findViewById(R.id.spinner);
+        taskCategorySpinner.setAdapter(new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                TaskState.values()));
             Task newTask=Task.builder()
                     .name(title)
                     .body(body)
-                    .state(state)
+                    .state((TaskState) taskCategorySpinner.getSelectedItem())
                     .teamTask(selectedTeams)
                     .taskImageS3Key(imageS3Key)
+                    .taskLatitude(latitude)
+                    .taskLongitude(longitude)
                     .build();
             Amplify.API.mutate(
                     ModelMutation.create(newTask),
                     successResponse -> Log.i(TAG,"AddTaskActivity.onCreate(): created a task successfully"),
                     failResponse -> Log.i(TAG,"AddTaskActivity.onCreate(): failed to create a task"+failResponse)
             );
-
+            Toast.makeText(this, "Submitted!", Toast.LENGTH_SHORT).show();
             // counter
             TextView count=findViewById(R.id.counter);
             count.setText(String.valueOf(x++));
-        });
     }
 
     private void backButton(){
@@ -235,7 +358,7 @@ public class AddTaskActivity extends AppCompatActivity {
                 {
                     Log.i(TAG, "Succeeded in getting file uploaded to S3! Key is: " + success.getKey());
 
-                    SubmitButton(success.getKey());
+                    s3ImageKey =success.getKey();
                     updateImageButtons();
                     ImageView taskImageView = findViewById(R.id.taskImageImageView);
                     InputStream pickedImageInputStreamCopy = null;
@@ -280,7 +403,7 @@ public class AddTaskActivity extends AppCompatActivity {
             ImageView productImageView = findViewById(R.id.taskImageImageView);
             productImageView.setImageResource(android.R.color.transparent);
 
-            SubmitButton("");
+            SubmitButton("", "", "", "", null, "");
             switchFromDeleteButtonToAddButton(deleteImageButton);
         });
     }

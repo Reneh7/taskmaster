@@ -7,9 +7,9 @@
           "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2024-01-20T22:02:22.508Z",
+              "apiKeyExpirationDate": "2024-01-27T18:48:41.410Z",
               "apiKeyExpirationDays": 60,
-              "description": "this api key is for the model to be generated in the cloud and its for lab37"
+              "description": "this api key is for the model to be generated in the cloud and its for lab39"
             },
             "authenticationType": "API_KEY"
           }
