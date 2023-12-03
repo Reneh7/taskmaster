@@ -16,6 +16,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.auth.AuthUser;
 import com.amplifyframework.auth.AuthUserAttribute;
@@ -84,6 +85,13 @@ public class HomeActivity extends AppCompatActivity {
         SharedPreferences sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
         String username = sharedPreferences.getString("username", "DefaultUsername");
         user.setText(username +"'s Tasks:");
+
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("openedApp")
+                .addProperty("trackingEvent", " main activity opened")
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
 
         AuthUser authUser=Amplify.Auth.getCurrentUser();
         if(authUser==null){
