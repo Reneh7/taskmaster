@@ -8,10 +8,15 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Geocoder;
+
+import com.amplifyframework.core.Amplify;
 import com.google.android.gms.location.LocationRequest;
+
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -24,7 +29,12 @@ import com.bumptech.glide.Glide;
 import com.google.android.gms.location.LocationServices;
 import com.practice.taskmaster.R;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Locale;
 
 public class TaskDetailsActivity extends AppCompatActivity {
@@ -36,6 +46,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
     FusedLocationProviderClient locationProviderClient = null;
 
     Geocoder geocoder = null;
+
+    private MediaPlayer mp=null;
 
 
     @Override
@@ -72,8 +84,10 @@ public class TaskDetailsActivity extends AppCompatActivity {
                 }
             }
         };
+        mp= new MediaPlayer();
 
         TaskDetails();
+        setUpSpeakButton();
         BackButton();
     }
 
@@ -146,6 +160,40 @@ public class TaskDetailsActivity extends AppCompatActivity {
             String imagePath = "https://taskmaster1ac110bfc191422780d3c37527c67037202659-dev.s3.us-west-2.amazonaws.com/public/"+taskImage;
             Log.d("imagePath", "Image path: " + imagePath);
             Glide.with(this).load(imagePath).into(taskImageView);
+        }
+    }
+
+    private void setUpSpeakButton(){
+        Button speakButton = (Button) findViewById(R.id.readTextButton);
+        speakButton.setOnClickListener(b ->
+        {
+            String taskDescription= ((EditText) findViewById(R.id.taskDetailsBody)).getText().toString();
+
+            Amplify.Predictions.convertTextToSpeech(
+                    taskDescription,
+                    result -> playAudio(result.getAudioData()),
+                    error -> Log.e(TAG,"conversion failed ", error)
+            );
+        });
+    }
+    // Taken from https://stackoverflow.com/a/25005243/16889809
+
+    private void playAudio(InputStream data) {
+        File mp3File = new File(getCacheDir(), "audio.mp3");
+
+        try (OutputStream out = new FileOutputStream(mp3File)) {
+            byte[] buffer = new byte[8 * 1_024];
+            int bytesRead;
+            while ((bytesRead = data.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            mp.reset();
+            mp.setOnPreparedListener(MediaPlayer::start);
+            mp.setDataSource(new FileInputStream(mp3File).getFD());
+            mp.prepareAsync();
+        } catch (IOException error) {
+            Log.e("MyAmplifyApp", "Error writing audio file", error);
         }
     }
 
